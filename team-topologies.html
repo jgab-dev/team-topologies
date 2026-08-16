@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team Topologies — Key Points</title>
 <style>
   :root{
     --ink:#14181c;
@@ -91,11 +97,12 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:clamp(24px,6vw,72px);
+    padding:clamp(20px,5vw,56px);
     opacity:0;
     visibility:hidden;
     transform:translateY(10px);
     transition:opacity .32s ease, transform .32s ease;
+    overflow-y:auto;
   }
   .slide.active{
     opacity:1;
@@ -177,8 +184,8 @@
 
   .cards{
     display:grid;
-    gap:18px;
-    margin-top:6px;
+    gap:12px;
+    margin-top:4px;
   }
   .cards.count-3{ grid-template-columns:repeat(3,1fr); }
   .cards.count-4{ grid-template-columns:repeat(2,1fr); }
@@ -191,21 +198,49 @@
     border:1px solid var(--line);
     border-left:3px solid var(--tag-color, var(--accent));
     border-radius:6px;
-    padding:18px 20px;
+    padding:12px 16px;
     box-shadow:var(--shadow);
   }
   .card h4{
     font-family:var(--font-mono);
-    font-size:13px;
+    font-size:12.5px;
     letter-spacing:.04em;
-    margin:0 0 8px 0;
+    margin:0 0 5px 0;
     color:var(--tag-color, var(--accent));
   }
   .card p{
     margin:0;
-    font-size:15px;
-    line-height:1.5;
+    font-size:14px;
+    line-height:1.42;
     color:var(--ink);
+  }
+
+  .diagram-top{
+    max-width:400px;
+    margin:0 auto 14px auto;
+  }
+  .diagram-top svg{ width:100%; height:auto; display:block; }
+
+  .slide-grid{
+    display:grid;
+    grid-template-columns:minmax(200px,36%) 1fr;
+    gap:clamp(24px,4vw,48px);
+    align-items:center;
+  }
+  .slide-grid .diagram-col{ min-width:0; }
+  .slide-grid .diagram-col svg{ width:100%; height:auto; display:block; }
+  .slide-grid .text-col{ min-width:0; }
+  @media (max-width:760px){
+    .slide-grid{ grid-template-columns:1fr; }
+  }
+
+  .diagram-caption{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    letter-spacing:.02em;
+    color:var(--muted);
+    opacity:.7;
+    margin:10px 0 0 0;
   }
 
   /* title slide */
@@ -267,6 +302,8 @@
     .progress-fill{ transition:none; }
   }
 </style>
+</head>
+<body>
 
 <div class="deck">
   <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
@@ -286,7 +323,7 @@
 
 <script>
 (function(){
-  var raw = "### \n# Team Topologies\n## Organizing Business and Technology for Fast Flow of Value\nMatthew Skelton & Manuel Pais — 2nd Edition, 2025\nKey ideas, distilled to 25 slides\n---\n### THE PROBLEM\n# Org charts don't ship software. Team boundaries do.\n- Most delivery bottlenecks are organizational, not technical\n- Conway's Law: system design mirrors communication structure\n- Ad hoc team design creates a hidden coordination tax\n- The fix isn't a better process — it's a better team topology\n---\n### THE CORE IDEA\n# The team is the smallest unit of delivery\n- Stop optimizing individuals; optimize the team\n- Teams should be long-lived, not project-shaped\n- Give teams clear boundaries and real ownership\n- \"Team-first\" thinking replaces \"org chart\" thinking\n---\n### 2ND EDITION — REFRAMED\n# From efficient machines to flourishing ecosystems\n- 1st edition (2019) optimized primarily for throughput and flow efficiency\n- 2nd edition (2025) foregrounds purpose, people, and adaptability\n- Clear intent and purpose are now treated as prerequisites for speed\n- Cognitive load moves from \"a consideration\" to a foundational design principle\n---\n### DESIGN CONSTRAINT #1\n# Team cognitive load is the limiting resource\n- Every team has a finite capacity to hold context\n- Assign a team more than it can hold, and delivery slows, quality drops\n- Team size and scope must be set deliberately, not by default\n- Ask of every team: \"what can this team actually own well?\"\n---\n### DESIGN CONSTRAINT #1, CONTINUED\n# Three kinds of load, only one worth spending\n#### Intrinsic\nLoad inherent to the task itself — irreducible domain complexity.\n#### Extraneous\nLoad from poor tooling, unclear docs, noisy environments — reduce this.\n#### Germane\nLoad spent on the problem that actually matters — protect this.\n---\n### THE VOCABULARY\n# Four team types cover almost every org\n#### Stream-aligned\nOwns a flow of work end-to-end.\n#### Enabling\nHelps other teams close a capability gap.\n#### Complicated-subsystem\nOwns a piece of deep technical specialism.\n#### Platform grouping\nProvides self-service capability to stream-aligned teams.\n---\n### TEAM TYPE 1 OF 4\n# Stream-aligned team\n- The default, primary team type — most teams should be this\n- Aligned to a single valuable stream of work: a product, service, or user journey\n- Empowered to build, test, and release without heavy handoffs\n- Success metric: can it ship a change without waiting on another team?\n---\n### TEAM TYPE 2 OF 4\n# Enabling team\n- Specialists who help stream-aligned teams gain a missing capability\n- Engages temporarily — weeks to a quarter, not permanently\n- Goal is to leave the stream-aligned team more capable, not to do the work for them\n- Watch for enabling teams that quietly become a permanent dependency\n---\n### TEAM TYPE 3 OF 4\n# Complicated-subsystem team\n- Owns a subsystem that genuinely requires specialist knowledge — a codec, a pricing engine, a model core\n- Reduces cognitive load on stream-aligned teams by hiding deep complexity\n- Used sparingly — most \"complicated\" code isn't actually complicated enough to justify one\n- Exposed to other teams as a service, not as shared code to modify\n---\n### TEAM TYPE 4 OF 4 — RENAMED IN 2ND EDITION\n# Platform grouping\n- Provides internal services that stream-aligned teams consume to reduce their load\n- 2nd edition renames \"platform team\" to \"platform grouping\"\n- Reflects reality: most real platforms are built by several teams, not one\n- A good platform is a compelling internal product, with its own UX and support bar\n---\n### A SHARED CONCEPT\n# Every team has an API, whether it names one or not\n- Team API = everything another team experiences when interacting with yours\n- Code and interfaces, but also docs, wikis, on-call practice, response times, roadmap visibility\n- Designing it deliberately reduces friction and cognitive load for everyone else\n- Bad team APIs are the real source of most \"communication problems\"\n---\n### THE UNDERLYING FORCE\n# Conway's Law: architecture mirrors communication\n- \"Organizations design systems that mirror their own communication structure\" — Mel Conway, 1967\n- Team boundaries become software boundaries whether you plan it or not\n- Fighting it with process alone is a losing battle\n- Better approach: design the org you want, and let the architecture follow\n---\n### THE UNDERLYING FORCE, CONTINUED\n# The inverse Conway maneuver\n- Deliberately shape team structure to produce the architecture you want\n- Want loosely-coupled services? Start with loosely-coupled teams\n- Team boundaries become a design tool, not an HR afterthought\n- Org design and software architecture should be decided together, not sequentially\n---\n### HOW TEAMS MEET\n# Three modes govern every team-to-team interaction\n#### Collaboration\nWork closely together, shared responsibility, for a bounded time.\n#### X-as-a-Service\nConsume or provide with minimal collaboration, through a clear interface.\n#### Facilitating\nOne team helps another get unstuck, with no shared delivery ownership.\n---\n### INTERACTION MODE 1 OF 3\n# Collaboration\n- Two teams work side by side toward a shared outcome\n- High bandwidth, high discovery — good for genuinely novel problems\n- Also high cognitive load — use it deliberately, not by default\n- Time-box it: collaboration should resolve into X-as-a-Service once the interface is clear\n---\n### INTERACTION MODE 2 OF 3\n# X-as-a-Service\n- One team consumes what another provides through a well-defined interface\n- Low collaboration overhead, clear ownership, minimal cognitive load\n- Requires a genuinely usable interface — API, docs, self-service tooling\n- The steady state most platform and complicated-subsystem interactions should reach\n---\n### INTERACTION MODE 3 OF 3\n# Facilitating\n- A team, often an enabling team, helps another learn, unblock, or adopt a practice\n- Deliberately temporary — success means the facilitating team is no longer needed\n- No shared delivery responsibility — facilitators don't own the outcome\n- Common failure: facilitation that never ends becomes a silent dependency\n---\n### HOW TO SPLIT WORK\n# Fracture planes: where to cut, deliberately\n- A fracture plane is a natural seam along which a system and its teams can split\n- Common planes: business domain, regulatory boundary, change cadence, risk, geography, tech stack\n- Split along a plane that reduces cross-team coupling, not one that's merely convenient\n- A bad split recreates the coordination tax you were trying to remove\n---\n### THIS ISN'T A ONE-TIME DESIGN\n# Organizational sensing\n- Team topologies are a starting hypothesis, not a permanent structure\n- Watch for signals: rising lead time, repeated hand-offs, a team that can't explain its own scope\n- Sensing is a continuous, lightweight practice — not a yearly reorg\n- Treat team structure the way you treat architecture: refactor it as you learn\n---\n### TOPOLOGIES CHANGE OVER TIME\n# Team structures should evolve, not calcify\n- As a product or platform matures, the right topology for it changes\n- Merge teams once an interface stabilizes; split teams once cognitive load grows\n- Reteaming is disruptive — do it deliberately, on a cadence people can plan around\n- Keep two maps: the current reality, and where you intend to move next\n---\n### WHAT TO AVOID\n# Patterns that quietly recreate the old problems\n- Enabling teams that never leave and become a permanent bottleneck\n- Platform teams built without product or UX discipline — \"internal, but still painful\"\n- Collaboration mode used everywhere by default, spiking everyone's cognitive load\n- Reorgs driven by hierarchy and headcount instead of by flow of value\n---\n### WHAT'S NEW IN THE 2025 EDITION\n# Five years of real-world evidence\n- Ten new case studies spanning pharma, law, HR, healthcare, and more — beyond the original tech-sector focus\n- New foreword and afterword reflecting on the model's global adoption since 2019\n- \"Platform grouping\" replaces \"platform team,\" based on real-world road-testing\n- The core four team types and three interaction modes are unchanged — the model held up\n---\n### TAKE THIS BACK TO YOUR ORG\n# If you remember five things\n- Optimize for fast flow of value, not for org-chart neatness\n- Stream-aligned teams should be the default; the other three exist to serve them\n- Protect team cognitive load like you'd protect a production system's capacity\n- Choose the interaction mode deliberately, and let it change over time\n- Team structure is a live design decision, not a one-time chart\n---\n### GO DEEPER\n# Team Topologies, 2nd Edition\n- Matthew Skelton & Manuel Pais — IT Revolution Press, 2025\n- teamtopologies.com — assessments, case studies, community resources\n- This deck is an orientation summary — read the book for the full model and case studies";
+  var raw = "### \n# Team Topologies\n## Organizing Business and Technology for Fast Flow of Value\nMatthew Skelton & Manuel Pais — 2nd Edition, 2025\nKey ideas, distilled to 25 slides\n---\n### THE PROBLEM\n# Org charts don't ship software. Team boundaries do.\n- Most delivery bottlenecks are organizational, not technical\n- Conway's Law: system design mirrors communication structure\n- Ad hoc team design creates a hidden coordination tax\n- The fix isn't a better process — it's a better team topology\n---\n### THE CORE IDEA\n# The team is the smallest unit of delivery\n- Stop optimizing individuals; optimize the team\n- Teams should be long-lived, not project-shaped\n- Give teams clear boundaries and real ownership\n- \"Team-first\" thinking replaces \"org chart\" thinking\n---\n### 2ND EDITION — REFRAMED\n# From efficient machines to flourishing ecosystems\n- 1st edition (2019) optimized primarily for throughput and flow efficiency\n- 2nd edition (2025) foregrounds purpose, people, and adaptability\n- Clear intent and purpose are now treated as prerequisites for speed\n- Cognitive load moves from \"a consideration\" to a foundational design principle\n---\n### DESIGN CONSTRAINT #1\n# Team cognitive load is the limiting resource\n- Every team has a finite capacity to hold context\n- Assign a team more than it can hold, and delivery slows, quality drops\n- Team size and scope must be set deliberately, not by default\n- Ask of every team: \"what can this team actually own well?\"\n---\n### DESIGN CONSTRAINT #1, CONTINUED\n# Three kinds of load, only one worth spending\n<!-- diagram: cognitive-load -->\n#### Intrinsic\nLoad inherent to the task itself — irreducible domain complexity.\n#### Extraneous\nLoad from poor tooling, unclear docs, noisy environments — reduce this.\n#### Germane\nLoad spent on the problem that actually matters — protect this.\n---\n### THE VOCABULARY\n# Four team types cover almost every org\n<!-- diagram: four-teams -->\n#### Stream-aligned\nOwns a flow of work end-to-end.\n#### Enabling\nHelps other teams close a capability gap.\n#### Complicated-subsystem\nOwns a piece of deep technical specialism.\n#### Platform grouping\nProvides self-service capability to stream-aligned teams.\n---\n### TEAM TYPE 1 OF 4\n# Stream-aligned team\n- The default, primary team type — most teams should be this\n- Aligned to a single valuable stream of work: a product, service, or user journey\n- Empowered to build, test, and release without heavy handoffs\n- Success metric: can it ship a change without waiting on another team?\n---\n### TEAM TYPE 2 OF 4\n# Enabling team\n- Specialists who help stream-aligned teams gain a missing capability\n- Engages temporarily — weeks to a quarter, not permanently\n- Goal is to leave the stream-aligned team more capable, not to do the work for them\n- Watch for enabling teams that quietly become a permanent dependency\n---\n### TEAM TYPE 3 OF 4\n# Complicated-subsystem team\n- Owns a subsystem that genuinely requires specialist knowledge — a codec, a pricing engine, a model core\n- Reduces cognitive load on stream-aligned teams by hiding deep complexity\n- Used sparingly — most \"complicated\" code isn't actually complicated enough to justify one\n- Exposed to other teams as a service, not as shared code to modify\n---\n### TEAM TYPE 4 OF 4 — RENAMED IN 2ND EDITION\n# Platform grouping\n- Provides internal services that stream-aligned teams consume to reduce their load\n- 2nd edition renames \"platform team\" to \"platform grouping\"\n- Reflects reality: most real platforms are built by several teams, not one\n- A good platform is a compelling internal product, with its own UX and support bar\n---\n### A SHARED CONCEPT\n# Every team has an API, whether it names one or not\n<!-- diagram: team-api -->\n- Team API = everything another team experiences when interacting with yours\n- Code and interfaces, but also docs, wikis, on-call practice, response times, roadmap visibility\n- Designing it deliberately reduces friction and cognitive load for everyone else\n- Bad team APIs are the real source of most \"communication problems\"\n---\n### THE UNDERLYING FORCE\n# Conway's Law: architecture mirrors communication\n<!-- diagram: conway -->\n- \"Organizations design systems that mirror their own communication structure\" — Mel Conway, 1967\n- Team boundaries become software boundaries whether you plan it or not\n- Fighting it with process alone is a losing battle\n- Better approach: design the org you want, and let the architecture follow\n---\n### THE UNDERLYING FORCE, CONTINUED\n# The inverse Conway maneuver\n<!-- diagram: inverse-conway -->\n- Deliberately shape team structure to produce the architecture you want\n- Want loosely-coupled services? Start with loosely-coupled teams\n- Team boundaries become a design tool, not an HR afterthought\n- Org design and software architecture should be decided together, not sequentially\n---\n### HOW TEAMS MEET\n# Three modes govern every team-to-team interaction\n<!-- diagram: three-modes -->\n#### Collaboration\nWork closely together, shared responsibility, for a bounded time.\n#### X-as-a-Service\nConsume or provide with minimal collaboration, through a clear interface.\n#### Facilitating\nOne team helps another get unstuck, with no shared delivery ownership.\n---\n### INTERACTION MODE 1 OF 3\n# Collaboration\n- Two teams work side by side toward a shared outcome\n- High bandwidth, high discovery — good for genuinely novel problems\n- Also high cognitive load — use it deliberately, not by default\n- Time-box it: collaboration should resolve into X-as-a-Service once the interface is clear\n---\n### INTERACTION MODE 2 OF 3\n# X-as-a-Service\n- One team consumes what another provides through a well-defined interface\n- Low collaboration overhead, clear ownership, minimal cognitive load\n- Requires a genuinely usable interface — API, docs, self-service tooling\n- The steady state most platform and complicated-subsystem interactions should reach\n---\n### INTERACTION MODE 3 OF 3\n# Facilitating\n- A team, often an enabling team, helps another learn, unblock, or adopt a practice\n- Deliberately temporary — success means the facilitating team is no longer needed\n- No shared delivery responsibility — facilitators don't own the outcome\n- Common failure: facilitation that never ends becomes a silent dependency\n---\n### HOW TO SPLIT WORK\n# Fracture planes: where to cut, deliberately\n<!-- diagram: fracture-planes -->\n- A fracture plane is a natural seam along which a system and its teams can split\n- Common planes: business domain, regulatory boundary, change cadence, risk, geography, tech stack\n- Split along a plane that reduces cross-team coupling, not one that's merely convenient\n- A bad split recreates the coordination tax you were trying to remove\n---\n### THIS ISN'T A ONE-TIME DESIGN\n# Organizational sensing\n- Team topologies are a starting hypothesis, not a permanent structure\n- Watch for signals: rising lead time, repeated hand-offs, a team that can't explain its own scope\n- Sensing is a continuous, lightweight practice — not a yearly reorg\n- Treat team structure the way you treat architecture: refactor it as you learn\n---\n### TOPOLOGIES CHANGE OVER TIME\n# Team structures should evolve, not calcify\n- As a product or platform matures, the right topology for it changes\n- Merge teams once an interface stabilizes; split teams once cognitive load grows\n- Reteaming is disruptive — do it deliberately, on a cadence people can plan around\n- Keep two maps: the current reality, and where you intend to move next\n---\n### WHAT TO AVOID\n# Patterns that quietly recreate the old problems\n- Enabling teams that never leave and become a permanent bottleneck\n- Platform teams built without product or UX discipline — \"internal, but still painful\"\n- Collaboration mode used everywhere by default, spiking everyone's cognitive load\n- Reorgs driven by hierarchy and headcount instead of by flow of value\n---\n### WHAT'S NEW IN THE 2025 EDITION\n# Five years of real-world evidence\n- Ten new case studies spanning pharma, law, HR, healthcare, and more — beyond the original tech-sector focus\n- New foreword and afterword reflecting on the model's global adoption since 2019\n- \"Platform grouping\" replaces \"platform team,\" based on real-world road-testing\n- The core four team types and three interaction modes are unchanged — the model held up\n---\n### TAKE THIS BACK TO YOUR ORG\n# If you remember five things\n- Optimize for fast flow of value, not for org-chart neatness\n- Stream-aligned teams should be the default; the other three exist to serve them\n- Protect team cognitive load like you'd protect a production system's capacity\n- Choose the interaction mode deliberately, and let it change over time\n- Team structure is a live design decision, not a one-time chart\n---\n### GO DEEPER\n# Team Topologies, 2nd Edition\n- Matthew Skelton & Manuel Pais — IT Revolution Press, 2025\n- teamtopologies.com — assessments, case studies, community resources\n- This deck is an orientation summary — read the book for the full model and case studies\n- Diagrams in this deck are original illustrations created for this summary, not reproductions of the book's artwork — see teamtopologies.com/use-of-team-topologies-materials";
 
   function esc(s){
     return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -299,16 +336,18 @@
 
   function parseSlide(chunk){
     var lines = chunk.split("\n");
-    var slide = {eyebrow:"", title:"", subtitle:"", bullets:[], paragraphs:[], cards:[]};
+    var slide = {eyebrow:"", title:"", subtitle:"", bullets:[], paragraphs:[], cards:[], diagram:null};
     var currentCard = null;
     for (var i=0;i<lines.length;i++){
       var line = lines[i];
       var t = line.trim();
       if (t === ""){ continue; }
-      var m = t.match(/^(#{1,6})\s+(.*)$/);
+      var dm = t.match(/^<!--\s*diagram:\s*([\w-]+)\s*-->$/);
+      if (dm){ slide.diagram = dm[1]; continue; }
+      var m = t.match(/^(#{1,6})(?:\s+(.*))?$/);
       if (m){
         var level = m[1].length;
-        var text = m[2].trim();
+        var text = (m[2] || "").trim();
         if (level === 1){ slide.title = text; }
         else if (level === 2){ slide.subtitle = text; }
         else if (level === 3){ slide.eyebrow = text; }
@@ -328,6 +367,120 @@
     }
     return slide;
   }
+
+  var diagrams = {
+    "four-teams": function(){
+      return '<svg viewBox="0 0 560 300" role="img" aria-label="Stream-aligned teams at the center, supported by platform, enabling, and complicated-subsystem teams">' +
+        '<line x1="300" y1="150" x2="146" y2="82" stroke="var(--amber)" stroke-width="2"/>' +
+        '<line x1="300" y1="150" x2="146" y2="222" stroke="var(--violet)" stroke-width="2"/>' +
+        '<line x1="300" y1="150" x2="436" y2="150" stroke="var(--slate-tag)" stroke-width="2"/>' +
+        '<circle cx="300" cy="150" r="54" fill="var(--accent)"/>' +
+        '<text x="300" y="146" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--paper)">Stream-</text>' +
+        '<text x="300" y="161" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--paper)">aligned</text>' +
+        '<circle cx="110" cy="70" r="36" fill="var(--amber)"/>' +
+        '<text x="110" y="74" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--paper)">Platform</text>' +
+        '<circle cx="110" cy="230" r="36" fill="var(--violet)"/>' +
+        '<text x="110" y="234" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--paper)">Enabling</text>' +
+        '<circle cx="470" cy="150" r="36" fill="var(--slate-tag)"/>' +
+        '<text x="470" y="147" text-anchor="middle" font-family="var(--font-mono)" font-size="8.5" fill="var(--paper)">Complicated</text>' +
+        '<text x="470" y="158" text-anchor="middle" font-family="var(--font-mono)" font-size="8.5" fill="var(--paper)">subsystem</text>' +
+        '</svg>';
+    },
+    "cognitive-load": function(){
+      return '<svg viewBox="0 0 560 108" role="img" aria-label="Team capacity split into intrinsic, extraneous, and germane load">' +
+        '<line x1="20" y1="20" x2="540" y2="20" stroke="var(--muted)" stroke-width="1"/>' +
+        '<line x1="20" y1="14" x2="20" y2="26" stroke="var(--muted)" stroke-width="1"/>' +
+        '<line x1="540" y1="14" x2="540" y2="26" stroke="var(--muted)" stroke-width="1"/>' +
+        '<text x="280" y="11" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--muted)">TEAM CAPACITY</text>' +
+        '<rect x="20" y="40" width="160" height="38" fill="var(--slate-tag)"/>' +
+        '<rect x="180" y="40" width="150" height="38" fill="var(--amber)"/>' +
+        '<rect x="330" y="40" width="210" height="38" fill="var(--accent)"/>' +
+        '<text x="100" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--muted)">INTRINSIC</text>' +
+        '<text x="255" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--muted)">EXTRANEOUS ↓</text>' +
+        '<text x="435" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--muted)">GERMANE ↑</text>' +
+        '</svg>';
+    },
+    "team-api": function(){
+      return '<svg viewBox="0 0 520 190" role="img" aria-label="Two teams meeting across a well-defined team API boundary">' +
+        '<ellipse cx="140" cy="95" rx="100" ry="68" fill="var(--accent)" opacity="0.16" stroke="var(--accent)" stroke-width="2"/>' +
+        '<ellipse cx="380" cy="95" rx="100" ry="68" fill="var(--violet)" opacity="0.16" stroke="var(--violet)" stroke-width="2"/>' +
+        '<text x="140" y="100" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--ink)">TEAM A</text>' +
+        '<text x="380" y="100" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--ink)">TEAM B</text>' +
+        '<line x1="260" y1="26" x2="260" y2="164" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 4"/>' +
+        '<text x="260" y="16" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">TEAM API</text>' +
+        '<circle cx="260" cy="60" r="3" fill="var(--ink)"/>' +
+        '<circle cx="260" cy="95" r="3" fill="var(--ink)"/>' +
+        '<circle cx="260" cy="130" r="3" fill="var(--ink)"/>' +
+        '</svg>';
+    },
+    "conway": function(){
+      return '<svg viewBox="0 0 520 210" role="img" aria-label="Team communication structure mirrors system architecture">' +
+        '<circle cx="90" cy="55" r="16" fill="var(--accent)"/>' +
+        '<circle cx="50" cy="135" r="16" fill="var(--accent)"/>' +
+        '<circle cx="130" cy="135" r="16" fill="var(--accent)"/>' +
+        '<line x1="90" y1="55" x2="50" y2="135" stroke="var(--accent)" stroke-width="2"/>' +
+        '<line x1="90" y1="55" x2="130" y2="135" stroke="var(--accent)" stroke-width="2"/>' +
+        '<text x="90" y="188" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">TEAMS</text>' +
+        '<line x1="190" y1="95" x2="330" y2="95" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 5"/>' +
+        '<path d="M330,90 L340,95 L330,100" fill="none" stroke="var(--muted)" stroke-width="1.5"/>' +
+        '<path d="M190,90 L180,95 L190,100" fill="none" stroke="var(--muted)" stroke-width="1.5"/>' +
+        '<text x="260" y="83" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" fill="var(--muted)">MIRRORS</text>' +
+        '<rect x="374" y="41" width="34" height="28" rx="3" fill="var(--slate-tag)"/>' +
+        '<rect x="334" y="125" width="34" height="28" rx="3" fill="var(--slate-tag)"/>' +
+        '<rect x="414" y="125" width="34" height="28" rx="3" fill="var(--slate-tag)"/>' +
+        '<line x1="391" y1="69" x2="351" y2="125" stroke="var(--slate-tag)" stroke-width="2"/>' +
+        '<line x1="391" y1="69" x2="431" y2="125" stroke="var(--slate-tag)" stroke-width="2"/>' +
+        '<text x="391" y="188" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">SYSTEM MODULES</text>' +
+        '</svg>';
+    },
+    "inverse-conway": function(){
+      return '<svg viewBox="0 0 560 130" role="img" aria-label="Deliberately design team structure to shape the desired system architecture">' +
+        '<rect x="16" y="40" width="150" height="48" rx="6" fill="none" stroke="var(--accent)" stroke-width="2.5"/>' +
+        '<text x="91" y="59" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--ink)">TEAM</text>' +
+        '<text x="91" y="74" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--ink)">STRUCTURE</text>' +
+        '<path d="M174,64 L224,64" stroke="var(--accent)" stroke-width="2.5"/>' +
+        '<path d="M216,56 L228,64 L216,72" fill="none" stroke="var(--accent)" stroke-width="2.5"/>' +
+        '<rect x="234" y="40" width="90" height="48" rx="6" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 3"/>' +
+        '<text x="279" y="68" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">shapes</text>' +
+        '<path d="M332,64 L382,64" stroke="var(--accent)" stroke-width="2.5"/>' +
+        '<path d="M374,56 L386,64 L374,72" fill="none" stroke="var(--accent)" stroke-width="2.5"/>' +
+        '<rect x="392" y="40" width="150" height="48" rx="6" fill="none" stroke="var(--slate-tag)" stroke-width="2.5"/>' +
+        '<text x="467" y="59" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--ink)">SYSTEM</text>' +
+        '<text x="467" y="74" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--ink)">ARCHITECTURE</text>' +
+        '</svg>';
+    },
+    "three-modes": function(){
+      return '<svg viewBox="0 0 660 140" role="img" aria-label="Three interaction modes: collaboration, X-as-a-Service, and facilitating">' +
+        '<circle cx="92" cy="62" r="30" fill="none" stroke="var(--accent)" stroke-width="2.5"/>' +
+        '<circle cx="128" cy="62" r="30" fill="none" stroke="var(--accent)" stroke-width="2.5"/>' +
+        '<text x="110" y="120" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">COLLABORATION</text>' +
+        '<rect x="270" y="44" width="46" height="36" rx="4" fill="none" stroke="var(--amber)" stroke-width="2.5"/>' +
+        '<rect x="344" y="44" width="46" height="36" rx="4" fill="none" stroke="var(--amber)" stroke-width="2.5"/>' +
+        '<line x1="316" y1="62" x2="344" y2="62" stroke="var(--amber)" stroke-width="2.5"/>' +
+        '<path d="M337,54 L337,70 M330,54 L330,70" stroke="var(--amber)" stroke-width="2"/>' +
+        '<text x="330" y="120" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">X-AS-A-SERVICE</text>' +
+        '<circle cx="500" cy="62" r="16" fill="none" stroke="var(--violet)" stroke-width="2.5"/>' +
+        '<circle cx="572" cy="62" r="24" fill="none" stroke="var(--violet)" stroke-width="2.5"/>' +
+        '<line x1="518" y1="62" x2="544" y2="62" stroke="var(--violet)" stroke-width="2" stroke-dasharray="4 4"/>' +
+        '<path d="M540,56 L548,62 L540,68" fill="none" stroke="var(--violet)" stroke-width="2"/>' +
+        '<text x="536" y="120" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">FACILITATING</text>' +
+        '</svg>';
+    },
+    "fracture-planes": function(){
+      return '<svg viewBox="0 0 520 220" role="img" aria-label="A system split along fracture planes into team-sized pieces">' +
+        '<rect x="20" y="20" width="480" height="180" rx="10" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<rect x="26" y="26" width="148" height="168" rx="6" fill="var(--accent)" opacity="0.16"/>' +
+        '<rect x="186" y="26" width="148" height="168" rx="6" fill="var(--violet)" opacity="0.16"/>' +
+        '<rect x="346" y="26" width="148" height="168" rx="6" fill="var(--amber)" opacity="0.16"/>' +
+        '<path d="M180,20 C 160,70 210,110 170,200" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="6 5" opacity="0.6"/>' +
+        '<path d="M340,20 C 360,60 310,130 360,200" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="6 5" opacity="0.6"/>' +
+        '<text x="100" y="115" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">TEAM A</text>' +
+        '<text x="260" y="115" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">TEAM B</text>' +
+        '<text x="420" y="115" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--muted)">TEAM C</text>' +
+        '</svg>';
+    }
+  };
+  var diagramCaption = "Original diagram illustrating this concept — not from the book.";
 
   var chunks = raw.split(/\n---\n/);
   var slides = chunks.map(parseSlide);
@@ -355,33 +508,47 @@
     var titleHtml = s.title ? ('<h1>' + inline(s.title) + '</h1>') : "";
     var subtitleHtml = s.subtitle ? ('<p class="subtitle">' + inline(s.subtitle) + '</p>') : "";
 
-    var bodyHtml = "";
+    var diagramSvg = (s.diagram && diagrams[s.diagram]) ? diagrams[s.diagram]() : "";
+
+    var listHtml = "";
     if (s.cards.length){
       var countClass = "count-" + s.cards.length;
-      bodyHtml += '<div class="cards ' + countClass + '">';
+      listHtml += '<div class="cards ' + countClass + '">';
       s.cards.forEach(function(c, ci){
         var color = tagColors[ci % tagColors.length];
-        bodyHtml += '<div class="card" style="--tag-color:' + color + '">' +
+        listHtml += '<div class="card" style="--tag-color:' + color + '">' +
           '<h4>' + inline(c.title) + '</h4>' +
           '<p>' + inline(c.body) + '</p>' +
           '</div>';
       });
-      bodyHtml += '</div>';
+      listHtml += '</div>';
     } else if (s.bullets.length){
-      bodyHtml += '<ul class="bullets">';
+      listHtml += '<ul class="bullets">';
       s.bullets.forEach(function(b){
-        bodyHtml += '<li>' + inline(b) + '</li>';
+        listHtml += '<li>' + inline(b) + '</li>';
       });
-      bodyHtml += '</ul>';
+      listHtml += '</ul>';
     }
 
     if (s.paragraphs.length){
       s.paragraphs.forEach(function(p){
-        bodyHtml += '<p class="lede">' + inline(p) + '</p>';
+        listHtml += '<p class="lede">' + inline(p) + '</p>';
       });
     }
 
-    inner.innerHTML += eyebrowHtml + titleHtml + subtitleHtml + bodyHtml;
+    if (diagramSvg && s.cards.length){
+      inner.innerHTML += eyebrowHtml + titleHtml + subtitleHtml +
+        '<div class="diagram-top">' + diagramSvg + '<p class="diagram-caption">' + diagramCaption + '</p></div>' +
+        listHtml;
+    } else if (diagramSvg){
+      inner.innerHTML +=
+        '<div class="slide-grid">' +
+          '<div class="diagram-col">' + diagramSvg + '<p class="diagram-caption">' + diagramCaption + '</p></div>' +
+          '<div class="text-col">' + eyebrowHtml + titleHtml + subtitleHtml + listHtml + '</div>' +
+        '</div>';
+    } else {
+      inner.innerHTML += eyebrowHtml + titleHtml + subtitleHtml + listHtml;
+    }
     section.appendChild(inner);
     stage.appendChild(section);
   });
@@ -444,3 +611,5 @@
   render();
 })();
 </script>
+</body>
+</html>

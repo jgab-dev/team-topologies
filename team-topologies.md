@@ -51,6 +51,7 @@ Key ideas, distilled to 25 slides
 
 ### DESIGN CONSTRAINT #1, CONTINUED
 # Three kinds of load, only one worth spending
+<!-- diagram: cognitive-load -->
 #### Intrinsic
 Load inherent to the task itself — irreducible domain complexity.
 #### Extraneous
@@ -62,6 +63,7 @@ Load spent on the problem that actually matters — protect this.
 
 ### THE VOCABULARY
 # Four team types cover almost every org
+<!-- diagram: four-teams -->
 #### Stream-aligned
 Owns a flow of work end-to-end.
 #### Enabling
@@ -111,6 +113,7 @@ Provides self-service capability to stream-aligned teams.
 
 ### A SHARED CONCEPT
 # Every team has an API, whether it names one or not
+<!-- diagram: team-api -->
 - Team API = everything another team experiences when interacting with yours
 - Code and interfaces, but also docs, wikis, on-call practice, response times, roadmap visibility
 - Designing it deliberately reduces friction and cognitive load for everyone else
@@ -120,6 +123,7 @@ Provides self-service capability to stream-aligned teams.
 
 ### THE UNDERLYING FORCE
 # Conway's Law: architecture mirrors communication
+<!-- diagram: conway -->
 - "Organizations design systems that mirror their own communication structure" — Mel Conway, 1967
 - Team boundaries become software boundaries whether you plan it or not
 - Fighting it with process alone is a losing battle
@@ -129,6 +133,7 @@ Provides self-service capability to stream-aligned teams.
 
 ### THE UNDERLYING FORCE, CONTINUED
 # The inverse Conway maneuver
+<!-- diagram: inverse-conway -->
 - Deliberately shape team structure to produce the architecture you want
 - Want loosely-coupled services? Start with loosely-coupled teams
 - Team boundaries become a design tool, not an HR afterthought
@@ -138,6 +143,7 @@ Provides self-service capability to stream-aligned teams.
 
 ### HOW TEAMS MEET
 # Three modes govern every team-to-team interaction
+<!-- diagram: three-modes -->
 #### Collaboration
 Work closely together, shared responsibility, for a bounded time.
 #### X-as-a-Service
@@ -176,6 +182,7 @@ One team helps another get unstuck, with no shared delivery ownership.
 
 ### HOW TO SPLIT WORK
 # Fracture planes: where to cut, deliberately
+<!-- diagram: fracture-planes -->
 - A fracture plane is a natural seam along which a system and its teams can split
 - Common planes: business domain, regulatory boundary, change cadence, risk, geography, tech stack
 - Split along a plane that reduces cross-team coupling, not one that's merely convenient
@@ -234,3 +241,4 @@ One team helps another get unstuck, with no shared delivery ownership.
 - Matthew Skelton & Manuel Pais — IT Revolution Press, 2025
 - teamtopologies.com — assessments, case studies, community resources
 - This deck is an orientation summary — read the book for the full model and case studies
+- Diagrams in this deck are original illustrations created for this summary, not reproductions of the book's artwork — see teamtopologies.com/use-of-team-topologies-materials
