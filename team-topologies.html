@@ -1,0 +1,446 @@
+<style>
+  :root{
+    --ink:#14181c;
+    --paper:#f5f6f5;
+    --paper-raised:#ffffff;
+    --muted:#5b6570;
+    --line:rgba(20,24,28,0.14);
+    --line-soft:rgba(20,24,28,0.08);
+    --accent:#1e8f82;
+    --accent-ink:#0e4f48;
+    --amber:#b8650f;
+    --violet:#6b4fa0;
+    --slate-tag:#55606b;
+    --shadow:0 1px 2px rgba(20,24,28,0.06), 0 8px 24px -12px rgba(20,24,28,0.18);
+    --font-display:'Avenir Next','Century Gothic','Futura',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-body:'Optima','Segoe UI',system-ui,-apple-system,sans-serif;
+    --font-mono:ui-monospace,'SF Mono','Cascadia Code',Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#edefef;
+      --paper:#10151a;
+      --paper-raised:#171e24;
+      --muted:#93a0ab;
+      --line:rgba(237,239,239,0.16);
+      --line-soft:rgba(237,239,239,0.08);
+      --accent:#35b3a3;
+      --accent-ink:#bdeee6;
+      --amber:#e2954a;
+      --violet:#a48ddb;
+      --slate-tag:#8b98a3;
+      --shadow:0 1px 2px rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#edefef;
+    --paper:#10151a;
+    --paper-raised:#171e24;
+    --muted:#93a0ab;
+    --line:rgba(237,239,239,0.16);
+    --line-soft:rgba(237,239,239,0.08);
+    --accent:#35b3a3;
+    --accent-ink:#bdeee6;
+    --amber:#e2954a;
+    --violet:#a48ddb;
+    --slate-tag:#8b98a3;
+    --shadow:0 1px 2px rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.6);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .deck{
+    position:relative;
+    height:100vh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .progress{
+    height:3px;
+    width:100%;
+    background:var(--line-soft);
+    flex:0 0 auto;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--accent);
+    width:0%;
+    transition:width .35s ease;
+  }
+
+  .stage{
+    position:relative;
+    flex:1 1 auto;
+    min-height:0;
+  }
+
+  .slide{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:clamp(24px,6vw,72px);
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(10px);
+    transition:opacity .32s ease, transform .32s ease;
+  }
+  .slide.active{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+  }
+
+  .slide-inner{
+    max-width:880px;
+    width:100%;
+  }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent-ink);
+    margin:0 0 18px 0;
+    min-height:14px;
+  }
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(28px,4.6vw,52px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:0 0 14px 0;
+    text-wrap:balance;
+    color:var(--ink);
+  }
+
+  .subtitle{
+    font-family:var(--font-body);
+    font-weight:400;
+    font-size:clamp(16px,2vw,22px);
+    line-height:1.4;
+    color:var(--muted);
+    margin:0 0 28px 0;
+    max-width:65ch;
+    text-wrap:balance;
+  }
+
+  ul.bullets{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  ul.bullets li{
+    position:relative;
+    padding-left:26px;
+    font-size:clamp(16px,2vw,21px);
+    line-height:1.5;
+    color:var(--ink);
+    max-width:66ch;
+  }
+  ul.bullets li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:.6em;
+    width:8px;
+    height:8px;
+    border-radius:2px;
+    background:var(--accent);
+  }
+  ul.bullets li strong{ color:var(--ink); font-weight:700; }
+
+  .lede{
+    font-size:clamp(15px,1.7vw,19px);
+    color:var(--muted);
+    margin:6px 0 0 0;
+    line-height:1.5;
+  }
+
+  .cards{
+    display:grid;
+    gap:18px;
+    margin-top:6px;
+  }
+  .cards.count-3{ grid-template-columns:repeat(3,1fr); }
+  .cards.count-4{ grid-template-columns:repeat(2,1fr); }
+  @media (max-width:760px){
+    .cards.count-3, .cards.count-4{ grid-template-columns:1fr; }
+  }
+
+  .card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--tag-color, var(--accent));
+    border-radius:6px;
+    padding:18px 20px;
+    box-shadow:var(--shadow);
+  }
+  .card h4{
+    font-family:var(--font-mono);
+    font-size:13px;
+    letter-spacing:.04em;
+    margin:0 0 8px 0;
+    color:var(--tag-color, var(--accent));
+  }
+  .card p{
+    margin:0;
+    font-size:15px;
+    line-height:1.5;
+    color:var(--ink);
+  }
+
+  /* title slide */
+  .slide[data-index="0"] .slide-inner{ position:relative; }
+  .slide[data-index="0"] h1{ font-size:clamp(40px,7vw,72px); }
+  .slide[data-index="0"] .eyebrow{ display:none; }
+  .hero-lines{
+    position:absolute;
+    inset:-40px -10% auto -10%;
+    height:340px;
+    pointer-events:none;
+    opacity:.55;
+    z-index:-1;
+  }
+
+  .chrome{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px clamp(16px,4vw,32px);
+    border-top:1px solid var(--line-soft);
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+  }
+  .chrome-left{ display:flex; align-items:center; gap:10px; }
+  .deck-title{ letter-spacing:.04em; }
+  .counter{ font-variant-numeric:tabular-nums; }
+
+  .nav{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .nav button{
+    appearance:none;
+    border:1px solid var(--line);
+    background:var(--paper-raised);
+    color:var(--ink);
+    width:32px;
+    height:32px;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:16px;
+    line-height:1;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .nav button:hover{ border-color:var(--accent); }
+  .nav button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .nav button:disabled{ opacity:.35; cursor:default; }
+  .nav button.fs{ font-family:var(--font-mono); font-size:12px; width:auto; padding:0 10px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .slide{ transition:none; }
+    .progress-fill{ transition:none; }
+  }
+</style>
+
+<div class="deck">
+  <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="stage" id="stage"></div>
+  <div class="chrome">
+    <div class="chrome-left">
+      <span class="deck-title">TEAM TOPOLOGIES</span>
+      <span class="counter" id="counter">1 / 1</span>
+    </div>
+    <div class="nav">
+      <button id="prevBtn" aria-label="Previous slide">&#8592;</button>
+      <button id="nextBtn" aria-label="Next slide">&#8594;</button>
+      <button id="fsBtn" class="fs" aria-label="Toggle fullscreen">Fullscreen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var raw = "### \n# Team Topologies\n## Organizing Business and Technology for Fast Flow of Value\nMatthew Skelton & Manuel Pais — 2nd Edition, 2025\nKey ideas, distilled to 25 slides\n---\n### THE PROBLEM\n# Org charts don't ship software. Team boundaries do.\n- Most delivery bottlenecks are organizational, not technical\n- Conway's Law: system design mirrors communication structure\n- Ad hoc team design creates a hidden coordination tax\n- The fix isn't a better process — it's a better team topology\n---\n### THE CORE IDEA\n# The team is the smallest unit of delivery\n- Stop optimizing individuals; optimize the team\n- Teams should be long-lived, not project-shaped\n- Give teams clear boundaries and real ownership\n- \"Team-first\" thinking replaces \"org chart\" thinking\n---\n### 2ND EDITION — REFRAMED\n# From efficient machines to flourishing ecosystems\n- 1st edition (2019) optimized primarily for throughput and flow efficiency\n- 2nd edition (2025) foregrounds purpose, people, and adaptability\n- Clear intent and purpose are now treated as prerequisites for speed\n- Cognitive load moves from \"a consideration\" to a foundational design principle\n---\n### DESIGN CONSTRAINT #1\n# Team cognitive load is the limiting resource\n- Every team has a finite capacity to hold context\n- Assign a team more than it can hold, and delivery slows, quality drops\n- Team size and scope must be set deliberately, not by default\n- Ask of every team: \"what can this team actually own well?\"\n---\n### DESIGN CONSTRAINT #1, CONTINUED\n# Three kinds of load, only one worth spending\n#### Intrinsic\nLoad inherent to the task itself — irreducible domain complexity.\n#### Extraneous\nLoad from poor tooling, unclear docs, noisy environments — reduce this.\n#### Germane\nLoad spent on the problem that actually matters — protect this.\n---\n### THE VOCABULARY\n# Four team types cover almost every org\n#### Stream-aligned\nOwns a flow of work end-to-end.\n#### Enabling\nHelps other teams close a capability gap.\n#### Complicated-subsystem\nOwns a piece of deep technical specialism.\n#### Platform grouping\nProvides self-service capability to stream-aligned teams.\n---\n### TEAM TYPE 1 OF 4\n# Stream-aligned team\n- The default, primary team type — most teams should be this\n- Aligned to a single valuable stream of work: a product, service, or user journey\n- Empowered to build, test, and release without heavy handoffs\n- Success metric: can it ship a change without waiting on another team?\n---\n### TEAM TYPE 2 OF 4\n# Enabling team\n- Specialists who help stream-aligned teams gain a missing capability\n- Engages temporarily — weeks to a quarter, not permanently\n- Goal is to leave the stream-aligned team more capable, not to do the work for them\n- Watch for enabling teams that quietly become a permanent dependency\n---\n### TEAM TYPE 3 OF 4\n# Complicated-subsystem team\n- Owns a subsystem that genuinely requires specialist knowledge — a codec, a pricing engine, a model core\n- Reduces cognitive load on stream-aligned teams by hiding deep complexity\n- Used sparingly — most \"complicated\" code isn't actually complicated enough to justify one\n- Exposed to other teams as a service, not as shared code to modify\n---\n### TEAM TYPE 4 OF 4 — RENAMED IN 2ND EDITION\n# Platform grouping\n- Provides internal services that stream-aligned teams consume to reduce their load\n- 2nd edition renames \"platform team\" to \"platform grouping\"\n- Reflects reality: most real platforms are built by several teams, not one\n- A good platform is a compelling internal product, with its own UX and support bar\n---\n### A SHARED CONCEPT\n# Every team has an API, whether it names one or not\n- Team API = everything another team experiences when interacting with yours\n- Code and interfaces, but also docs, wikis, on-call practice, response times, roadmap visibility\n- Designing it deliberately reduces friction and cognitive load for everyone else\n- Bad team APIs are the real source of most \"communication problems\"\n---\n### THE UNDERLYING FORCE\n# Conway's Law: architecture mirrors communication\n- \"Organizations design systems that mirror their own communication structure\" — Mel Conway, 1967\n- Team boundaries become software boundaries whether you plan it or not\n- Fighting it with process alone is a losing battle\n- Better approach: design the org you want, and let the architecture follow\n---\n### THE UNDERLYING FORCE, CONTINUED\n# The inverse Conway maneuver\n- Deliberately shape team structure to produce the architecture you want\n- Want loosely-coupled services? Start with loosely-coupled teams\n- Team boundaries become a design tool, not an HR afterthought\n- Org design and software architecture should be decided together, not sequentially\n---\n### HOW TEAMS MEET\n# Three modes govern every team-to-team interaction\n#### Collaboration\nWork closely together, shared responsibility, for a bounded time.\n#### X-as-a-Service\nConsume or provide with minimal collaboration, through a clear interface.\n#### Facilitating\nOne team helps another get unstuck, with no shared delivery ownership.\n---\n### INTERACTION MODE 1 OF 3\n# Collaboration\n- Two teams work side by side toward a shared outcome\n- High bandwidth, high discovery — good for genuinely novel problems\n- Also high cognitive load — use it deliberately, not by default\n- Time-box it: collaboration should resolve into X-as-a-Service once the interface is clear\n---\n### INTERACTION MODE 2 OF 3\n# X-as-a-Service\n- One team consumes what another provides through a well-defined interface\n- Low collaboration overhead, clear ownership, minimal cognitive load\n- Requires a genuinely usable interface — API, docs, self-service tooling\n- The steady state most platform and complicated-subsystem interactions should reach\n---\n### INTERACTION MODE 3 OF 3\n# Facilitating\n- A team, often an enabling team, helps another learn, unblock, or adopt a practice\n- Deliberately temporary — success means the facilitating team is no longer needed\n- No shared delivery responsibility — facilitators don't own the outcome\n- Common failure: facilitation that never ends becomes a silent dependency\n---\n### HOW TO SPLIT WORK\n# Fracture planes: where to cut, deliberately\n- A fracture plane is a natural seam along which a system and its teams can split\n- Common planes: business domain, regulatory boundary, change cadence, risk, geography, tech stack\n- Split along a plane that reduces cross-team coupling, not one that's merely convenient\n- A bad split recreates the coordination tax you were trying to remove\n---\n### THIS ISN'T A ONE-TIME DESIGN\n# Organizational sensing\n- Team topologies are a starting hypothesis, not a permanent structure\n- Watch for signals: rising lead time, repeated hand-offs, a team that can't explain its own scope\n- Sensing is a continuous, lightweight practice — not a yearly reorg\n- Treat team structure the way you treat architecture: refactor it as you learn\n---\n### TOPOLOGIES CHANGE OVER TIME\n# Team structures should evolve, not calcify\n- As a product or platform matures, the right topology for it changes\n- Merge teams once an interface stabilizes; split teams once cognitive load grows\n- Reteaming is disruptive — do it deliberately, on a cadence people can plan around\n- Keep two maps: the current reality, and where you intend to move next\n---\n### WHAT TO AVOID\n# Patterns that quietly recreate the old problems\n- Enabling teams that never leave and become a permanent bottleneck\n- Platform teams built without product or UX discipline — \"internal, but still painful\"\n- Collaboration mode used everywhere by default, spiking everyone's cognitive load\n- Reorgs driven by hierarchy and headcount instead of by flow of value\n---\n### WHAT'S NEW IN THE 2025 EDITION\n# Five years of real-world evidence\n- Ten new case studies spanning pharma, law, HR, healthcare, and more — beyond the original tech-sector focus\n- New foreword and afterword reflecting on the model's global adoption since 2019\n- \"Platform grouping\" replaces \"platform team,\" based on real-world road-testing\n- The core four team types and three interaction modes are unchanged — the model held up\n---\n### TAKE THIS BACK TO YOUR ORG\n# If you remember five things\n- Optimize for fast flow of value, not for org-chart neatness\n- Stream-aligned teams should be the default; the other three exist to serve them\n- Protect team cognitive load like you'd protect a production system's capacity\n- Choose the interaction mode deliberately, and let it change over time\n- Team structure is a live design decision, not a one-time chart\n---\n### GO DEEPER\n# Team Topologies, 2nd Edition\n- Matthew Skelton & Manuel Pais — IT Revolution Press, 2025\n- teamtopologies.com — assessments, case studies, community resources\n- This deck is an orientation summary — read the book for the full model and case studies";
+
+  function esc(s){
+    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+  function inline(s){
+    s = esc(s);
+    s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    return s;
+  }
+
+  function parseSlide(chunk){
+    var lines = chunk.split("\n");
+    var slide = {eyebrow:"", title:"", subtitle:"", bullets:[], paragraphs:[], cards:[]};
+    var currentCard = null;
+    for (var i=0;i<lines.length;i++){
+      var line = lines[i];
+      var t = line.trim();
+      if (t === ""){ continue; }
+      var m = t.match(/^(#{1,6})\s+(.*)$/);
+      if (m){
+        var level = m[1].length;
+        var text = m[2].trim();
+        if (level === 1){ slide.title = text; }
+        else if (level === 2){ slide.subtitle = text; }
+        else if (level === 3){ slide.eyebrow = text; }
+        else if (level === 4){ currentCard = {title:text, body:""}; slide.cards.push(currentCard); }
+        continue;
+      }
+      if (t.indexOf("- ") === 0){
+        slide.bullets.push(t.slice(2));
+        currentCard = null;
+        continue;
+      }
+      if (currentCard){
+        currentCard.body += (currentCard.body ? " " : "") + t;
+      } else {
+        slide.paragraphs.push(t);
+      }
+    }
+    return slide;
+  }
+
+  var chunks = raw.split(/\n---\n/);
+  var slides = chunks.map(parseSlide);
+  var tagColors = ["var(--accent)","var(--violet)","var(--slate-tag)","var(--amber)"];
+
+  var stage = document.getElementById("stage");
+  slides.forEach(function(s, idx){
+    var section = document.createElement("section");
+    section.className = "slide";
+    section.setAttribute("data-index", idx);
+
+    var inner = document.createElement("div");
+    inner.className = "slide-inner";
+
+    if (idx === 0){
+      inner.innerHTML +=
+        '<svg class="hero-lines" viewBox="0 0 800 340" preserveAspectRatio="none" aria-hidden="true">' +
+        '<path d="M-20,260 C 180,180 300,300 500,180 S 760,60 840,120" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0.5"/>' +
+        '<path d="M-20,300 C 200,240 320,340 520,240 S 780,120 840,180" fill="none" stroke="var(--accent)" stroke-width="1.4" opacity="0.3"/>' +
+        '<path d="M-20,220 C 160,140 300,240 480,120 S 740,20 840,70" fill="none" stroke="var(--accent)" stroke-width="1.2" opacity="0.22"/>' +
+        '</svg>';
+    }
+
+    var eyebrowHtml = '<p class="eyebrow">' + (s.eyebrow ? esc(s.eyebrow) : "") + '</p>';
+    var titleHtml = s.title ? ('<h1>' + inline(s.title) + '</h1>') : "";
+    var subtitleHtml = s.subtitle ? ('<p class="subtitle">' + inline(s.subtitle) + '</p>') : "";
+
+    var bodyHtml = "";
+    if (s.cards.length){
+      var countClass = "count-" + s.cards.length;
+      bodyHtml += '<div class="cards ' + countClass + '">';
+      s.cards.forEach(function(c, ci){
+        var color = tagColors[ci % tagColors.length];
+        bodyHtml += '<div class="card" style="--tag-color:' + color + '">' +
+          '<h4>' + inline(c.title) + '</h4>' +
+          '<p>' + inline(c.body) + '</p>' +
+          '</div>';
+      });
+      bodyHtml += '</div>';
+    } else if (s.bullets.length){
+      bodyHtml += '<ul class="bullets">';
+      s.bullets.forEach(function(b){
+        bodyHtml += '<li>' + inline(b) + '</li>';
+      });
+      bodyHtml += '</ul>';
+    }
+
+    if (s.paragraphs.length){
+      s.paragraphs.forEach(function(p){
+        bodyHtml += '<p class="lede">' + inline(p) + '</p>';
+      });
+    }
+
+    inner.innerHTML += eyebrowHtml + titleHtml + subtitleHtml + bodyHtml;
+    section.appendChild(inner);
+    stage.appendChild(section);
+  });
+
+  var slideEls = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var current = 0;
+  var counter = document.getElementById("counter");
+  var progressFill = document.getElementById("progressFill");
+  var prevBtn = document.getElementById("prevBtn");
+  var nextBtn = document.getElementById("nextBtn");
+  var fsBtn = document.getElementById("fsBtn");
+
+  function render(){
+    slideEls.forEach(function(el, i){
+      el.classList.toggle("active", i === current);
+    });
+    counter.textContent = (current + 1) + " / " + slideEls.length;
+    progressFill.style.width = (((current + 1) / slideEls.length) * 100) + "%";
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slideEls.length - 1;
+  }
+
+  function go(delta){
+    var next = current + delta;
+    if (next < 0 || next >= slideEls.length) return;
+    current = next;
+    render();
+  }
+
+  prevBtn.addEventListener("click", function(){ go(-1); });
+  nextBtn.addEventListener("click", function(){ go(1); });
+
+  document.addEventListener("keydown", function(e){
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown"){ go(1); e.preventDefault(); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp"){ go(-1); e.preventDefault(); }
+    else if (e.key === "Home"){ current = 0; render(); }
+    else if (e.key === "End"){ current = slideEls.length - 1; render(); }
+    else if (e.key === "f" || e.key === "F"){ toggleFullscreen(); }
+  });
+
+  function toggleFullscreen(){
+    var el = document.documentElement;
+    if (!document.fullscreenElement){
+      if (el.requestFullscreen){ el.requestFullscreen(); }
+    } else {
+      if (document.exitFullscreen){ document.exitFullscreen(); }
+    }
+  }
+  fsBtn.addEventListener("click", toggleFullscreen);
+
+  var touchStartX = null;
+  document.addEventListener("touchstart", function(e){ touchStartX = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener("touchend", function(e){
+    if (touchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50){ go(dx < 0 ? 1 : -1); }
+    touchStartX = null;
+  }, {passive:true});
+
+  render();
+})();
+</script>
